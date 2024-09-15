@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>folixx.vercel.app</title>
+    <link rel="icon" type="image/x-icon" href="https://img.icons8.com/?size=100&id=WbRVMGxHh74X&format=png&color=000000">
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: Consolas, 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .cmd-window {
+            width: 100%;
+            height: 100%;
+            padding: 20px;
+            background-color: black;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
+        .cmd-line {
+            display: block;
+            margin-bottom: 10px;
+        }
+        .prompt {
+            color: white;
+        }
+        #user-input {
+            outline: none;
+            border: none;
+            background: none;
+            color: white;
+            font-family: inherit;
+            font-size: inherit;
+            width: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="cmd-window" id="cmd-window">
+        <div class="cmd-line">
+            <span class="prompt">C:\Users\Admin&gt;</span> <input type="text" id="user-input" autofocus>
+        </div>
+    </div>
+
+    <script>
+        const validCommands = {
+            "cmds": "Available commands: Github, Discord, Roblox, KongerHub, Telegram, clear",
+            "github": "Opened in new tab!",
+            "discord": "Opened in new tab!",
+            "roblox": "Opened in new tab!",
+            "kongerhub": "Opened in new tab!",
+            "telegram": "Opened in new tab!",
+            "clear": ""
+        };
+
+        const commandLinks = {
+            "github": "https://github.com/wtfplayer",
+            "discord": "https://discord.com/users/719903204690624512",
+            "roblox": "https://www.roblox.com/users/3784100047/profile",
+            "kongerhub": "https://kongerhub.vercel.app",
+            "telegram": "https://t.me/zxfolix"
+        };
+
+        function attachInputListener() {
+            document.getElementById("user-input").addEventListener("keydown", function(event) {
+                if (event.key === "Enter") {
+                    event.preventDefault();
+                    let inputValue = this.value.trim().toLowerCase();
+                    
+                    if (inputValue !== "") {
+                        const cmdWindow = document.getElementById("cmd-window");
+
+                        if (inputValue === "clear") {
+                            cmdWindow.innerHTML = `
+                                <div class="cmd-line">
+                                    <span class="prompt">C:\\Users\\Admin&gt;</span> <input type="text" id="user-input" autofocus>
+                                </div>
+                            `;
+                            attachInputListener();
+                            document.getElementById("user-input").focus();
+                            return;
+                        }
+
+                        const newCmdLine = document.createElement("div");
+                        newCmdLine.classList.add("cmd-line");
+                        newCmdLine.innerHTML = `<span class="prompt">C:\\Users\\Admin&gt;</span> ${this.value}`;
+                        cmdWindow.insertBefore(newCmdLine, this.parentElement);
+
+                        const resultCmdLine = document.createElement("div");
+                        resultCmdLine.classList.add("cmd-line");
+
+                        if (validCommands[inputValue]) {
+                            resultCmdLine.innerHTML = `<span class="prompt">C:\\Users\\Admin&gt;</span> ${validCommands[inputValue]}`;
+
+                            if (commandLinks[inputValue]) {
+                                window.open(commandLinks[inputValue], "_blank");
+                            }
+                        } else {
+                            resultCmdLine.innerHTML = `<span class="prompt">C:\\Users\\Admin&gt;</span> Command not recognized.`;
+                        }
+
+                        cmdWindow.insertBefore(resultCmdLine, this.parentElement);
+
+                        this.value = "";
+
+                        cmdWindow.scrollTop = cmdWindow.scrollHeight;
+                    }
+                }
+            });
+        }
+
+        attachInputListener();
+    </script>
+</body>
+</html>
